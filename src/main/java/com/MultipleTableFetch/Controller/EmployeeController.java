@@ -1,9 +1,11 @@
 package com.MultipleTableFetch.Controller;
 
+import com.MultipleTableFetch.Dto.APIResponse;
 import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +18,7 @@ public class EmployeeController {
 
     @GetMapping("getEmployee/{id}")
     public Employee getEmployee(@PathVariable int id) {
-        Employee employee = employeeService.getEmployee(id);
-        return employee;
+        return employeeService.getEmployee(id);
     }
 
     @GetMapping("/getEmployees")
@@ -25,8 +26,25 @@ public class EmployeeController {
         return employeeService.getAllEmployee();
     }
 
+    @GetMapping("findBy")
+    public List<Employee> findBy() {
+        return employeeService.findBy();
+    }
+
+    @GetMapping("findByEmployeeWithPaging/{offset}/{pageSize}")
+    public APIResponse<Page<Employee>> findByEmployeeWithPaging(@PathVariable int offset, @PathVariable int pageSize) {
+        Page<Employee> employeeWithPaging = employeeService.findByEmployeeWithPaging(offset, pageSize);
+        return new APIResponse<>(employeeWithPaging.getSize(), employeeWithPaging);
+    }
+
+    @GetMapping("findByEmployeeWithPagingAndSorting/{offset}/{pageSize}/{field}")
+    public APIResponse<Page<Employee>> findByEmployeeWithPagingANdSorting(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field) {
+        Page<Employee> employeeWithPaging = employeeService.findByEmployeeWithPagingAndSorting(offset, pageSize, field);
+        return new APIResponse<>(employeeWithPaging.getSize(), employeeWithPaging);
+    }
+
     @GetMapping("/findByRecords")
-    public List<EmployeeDetailsDto> findBy() {
+    public List<EmployeeDetailsDto> findByRecords() {
         return employeeService.findByInnerJoin();
     }
 

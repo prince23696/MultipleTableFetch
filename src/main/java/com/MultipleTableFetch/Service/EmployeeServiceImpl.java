@@ -4,6 +4,9 @@ import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +54,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDetailsDto> findByInnerJoin() {
         return employeeRepository.findByInnerJoin();
+    }
+
+    @Override
+    public List<Employee> findBy() {
+        return employeeRepository.findBy();
+    }
+
+    @Override
+    public Page<Employee> findByEmployeeWithPaging(int offset, int pageSize) {
+        return employeeRepository.findAll(PageRequest.of(offset, pageSize));
+    }
+
+    @Override
+    public Page<Employee> findByEmployeeWithPagingAndSorting(int offset, int pageSize, String field) {
+        return employeeRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field)));
+
     }
 }
