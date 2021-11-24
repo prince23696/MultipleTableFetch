@@ -1,5 +1,6 @@
 package com.MultipleTableFetch.Service;
 
+import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
 import com.MultipleTableFetch.Entity.Employee;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface EmployeeService {
 
     public String deleteEmployee(int id);
 
-    public List<Employee> findByInnerJoin();
+    public List<EmployeeDetailsDto> findByInnerJoin();
 }

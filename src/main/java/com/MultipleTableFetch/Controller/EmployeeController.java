@@ -1,5 +1,6 @@
 package com.MultipleTableFetch.Controller;
 
+import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/findByRecords")
-    public List<Employee> findBy() {
+    public List<EmployeeDetailsDto> findBy() {
         return employeeService.findByInnerJoin();
     }
 

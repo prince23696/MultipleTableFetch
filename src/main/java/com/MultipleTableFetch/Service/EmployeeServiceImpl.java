@@ -1,5 +1,6 @@
 package com.MultipleTableFetch.Service;
 
+import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByInnerJoin() {
+    public List<EmployeeDetailsDto> findByInnerJoin() {
         return employeeRepository.findByInnerJoin();
     }
 }
