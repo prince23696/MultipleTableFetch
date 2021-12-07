@@ -29,9 +29,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String addEmployee(Employee employee) {
+        //     if (employee.getName().equalsIgnoreCase("like")) {
         employeeRepository.save(employee);
         return "Employee Saved in database";
+   /*     } else if (employee.getName().equalsIgnoreCase("unlike")) {
+            String s = employeeRepository.deleteByName();
+            return s;
+        } else {
+            Employee employee1 = employeeRepository.findById(employee.getId()).get();
+            employee1.setName(employee.getName());
+            employee1.setDepartment(employee.getDepartment());
+            employee1.setSalary(employee.getSalary());
+            employee1.setGender(employee.getGender());
+            employeeRepository.save(employee1);
+            return "update employee";
+        }*/
     }
+
 
     @Override
     public Employee updateEmployee(int id, Employee employee) {
@@ -68,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Page<Employee> findByEmployeeWithPagingAndSorting(int offset, int pageSize, String field) {
-        return employeeRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(Sort.Direction.DESC, field)));
+        return employeeRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field).descending()));
 
     }
 }

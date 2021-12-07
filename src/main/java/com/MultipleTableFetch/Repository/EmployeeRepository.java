@@ -25,4 +25,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Value("#{target.id+' target.name+'target.salary+'('+ target.gender.gender+' gender)'}")
     public List<Employee> findBy();
 
+    @Query(value = "delete * from employee  where name='unlike' ", nativeQuery = true)
+    public String deleteByName();
+
+
 }
