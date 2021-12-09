@@ -9,4 +9,6 @@ public interface EmployeeDetailsDto {
     String getSalary();
 
     String getGender();
+
+    String getdept_name();
 }

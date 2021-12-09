@@ -1,6 +1,6 @@
 package com.MultipleTableFetch.Service;
 
-import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
+import com.MultipleTableFetch.Dto.EmployeeDetailsResponseDto;
 import com.MultipleTableFetch.Entity.Employee;
 import org.springframework.data.domain.Page;
 
@@ -18,9 +18,9 @@ public interface EmployeeService {
 
     public String deleteEmployee(int id);
 
-    public List<EmployeeDetailsDto> findByInnerJoin();
+    public EmployeeDetailsResponseDto findByInnerJoin();
 
-    public List<Employee> findBy();
+    public int countRecords();
 
     public Page<Employee> findByEmployeeWithPaging(int offset, int pageSize);
 

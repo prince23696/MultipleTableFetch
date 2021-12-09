@@ -1,14 +1,15 @@
 package com.MultipleTableFetch.Controller;
 
-import com.MultipleTableFetch.Dto.APIResponse;
-import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
+import com.MultipleTableFetch.Dto.EmployeeDetailsResponseDto;
+import com.MultipleTableFetch.Dto.EmployeeResponse;
+import com.MultipleTableFetch.Dto.EmployeeResponsePagingDto;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Service.EmployeeService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.DriverManager;
 import java.util.List;
 
 @RestController
@@ -18,35 +19,44 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @GetMapping("getEmployee/{id}")
+    @ApiOperation(value = "Get Employee By ID")
     public Employee getEmployee(@PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
     @GetMapping("/getEmployees")
-    public List<Employee> getAllEmployee() {
-        return employeeService.getAllEmployee();
+    public EmployeeResponse getAllEmployee() {
+        List<Employee> employees = employeeService.getAllEmployee();
+        return new EmployeeResponse(employees.size(), employees);
     }
+/*
 
     @GetMapping("findBy")
-    public List<Employee> findBy() {
-        return employeeService.findBy();
+    public APIResponse<Integer> findBy() {
+        int record = employeeService.countRecords();
+        return new APIResponse<Integer>(employeeService.findByInnerJoin().size(), record);
+
+        //     return employeeService.findBy();
     }
+*/
 
     @GetMapping("findByEmployeeWithPaging/{offset}/{pageSize}")
-    public APIResponse<Page<Employee>> findByEmployeeWithPaging(@PathVariable int offset, @PathVariable int pageSize) {
+    public EmployeeResponsePagingDto findByEmployeeWithPaging(@PathVariable int offset, @PathVariable int pageSize) {
         Page<Employee> employeeWithPaging = employeeService.findByEmployeeWithPaging(offset, pageSize);
-        return new APIResponse<>(employeeWithPaging.getSize(), employeeWithPaging);
+        return new EmployeeResponsePagingDto(employeeWithPaging.getSize(), employeeWithPaging);
     }
 
     @GetMapping("findByEmployeeWithPagingAndSorting/{offset}/{pageSize}/{field}")
-    public APIResponse<Page<Employee>> findByEmployeeWithPagingANdSorting(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field) {
-        Page<Employee> employeeWithPaging = employeeService.findByEmployeeWithPagingAndSorting(offset, pageSize, field);
-        return new APIResponse<>(employeeWithPaging.getSize(), employeeWithPaging);
+    public EmployeeResponsePagingDto findByEmployeeWithPagingANdSorting(@PathVariable int offset, @PathVariable int pageSize, @PathVariable String field) {
+        Page<Employee> employeeWithPagingAndSorting = employeeService.findByEmployeeWithPagingAndSorting(offset, pageSize, field);
+        return new EmployeeResponsePagingDto(employeeWithPagingAndSorting.getSize(), employeeWithPagingAndSorting);
     }
 
     @GetMapping("/findByRecords")
-    public List<EmployeeDetailsDto> findByRecords() {
+    public EmployeeDetailsResponseDto findByRecords() {
         return employeeService.findByInnerJoin();
+
+        // return employeeService.findByInnerJoin();
     }
 
     @PostMapping("/saveEmployee")
