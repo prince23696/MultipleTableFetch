@@ -1,6 +1,8 @@
 package com.MultipleTableFetch.Service;
 
 import com.MultipleTableFetch.Dto.EmployeeDetailsResponseDto;
+import com.MultipleTableFetch.Dto.LastEmployeeNameAndSalaryMultipleResponseDto;
+import com.MultipleTableFetch.Dto.LastEmployeeNameAndSalaryResponseDto;
 import com.MultipleTableFetch.Entity.Employee;
 import org.springframework.data.domain.Page;
 
@@ -26,4 +28,7 @@ public interface EmployeeService {
 
     public Page<Employee> findByEmployeeWithPagingAndSorting(int offset, int pageSize, String field);
 
+    public LastEmployeeNameAndSalaryResponseDto fetchByLastSalary();
+
+    public LastEmployeeNameAndSalaryMultipleResponseDto fetchByLastSalaryMultiple();
 }

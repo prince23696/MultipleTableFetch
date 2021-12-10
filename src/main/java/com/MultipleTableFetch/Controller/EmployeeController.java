@@ -1,8 +1,6 @@
 package com.MultipleTableFetch.Controller;
 
-import com.MultipleTableFetch.Dto.EmployeeDetailsResponseDto;
-import com.MultipleTableFetch.Dto.EmployeeResponse;
-import com.MultipleTableFetch.Dto.EmployeeResponsePagingDto;
+import com.MultipleTableFetch.Dto.*;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
@@ -29,16 +27,18 @@ public class EmployeeController {
         List<Employee> employees = employeeService.getAllEmployee();
         return new EmployeeResponse(employees.size(), employees);
     }
-/*
 
-    @GetMapping("findBy")
-    public APIResponse<Integer> findBy() {
-        int record = employeeService.countRecords();
-        return new APIResponse<Integer>(employeeService.findByInnerJoin().size(), record);
-
-        //     return employeeService.findBy();
+    @GetMapping("fetchByLastSalary")
+    public LastEmployeeNameAndSalaryResponseDto fetchByLastSalary() {
+        LastEmployeeNameAndSalaryResponseDto lastEmployeeNameAndSalaryResponseDto = employeeService.fetchByLastSalary();
+        return lastEmployeeNameAndSalaryResponseDto;
     }
-*/
+
+    @GetMapping("fetchByLastSalaryMultiple")
+    public LastEmployeeNameAndSalaryMultipleResponseDto fetchByLastSalaryMultiple() {
+        LastEmployeeNameAndSalaryMultipleResponseDto lastEmployeeNameAndSalaryMultipleResponseDtos = employeeService.fetchByLastSalaryMultiple();
+        return lastEmployeeNameAndSalaryMultipleResponseDtos;
+    }
 
     @GetMapping("findByEmployeeWithPaging/{offset}/{pageSize}")
     public EmployeeResponsePagingDto findByEmployeeWithPaging(@PathVariable int offset, @PathVariable int pageSize) {
@@ -55,8 +55,6 @@ public class EmployeeController {
     @GetMapping("/findByRecords")
     public EmployeeDetailsResponseDto findByRecords() {
         return employeeService.findByInnerJoin();
-
-        // return employeeService.findByInnerJoin();
     }
 
     @PostMapping("/saveEmployee")

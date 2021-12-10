@@ -1,7 +1,6 @@
 package com.MultipleTableFetch.Service;
 
-import com.MultipleTableFetch.Dto.EmployeeDetailsDto;
-import com.MultipleTableFetch.Dto.EmployeeDetailsResponseDto;
+import com.MultipleTableFetch.Dto.*;
 import com.MultipleTableFetch.Entity.Employee;
 import com.MultipleTableFetch.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -91,5 +89,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<Employee> findByEmployeeWithPagingAndSorting(int offset, int pageSize, String field) {
         return employeeRepository.findAll(PageRequest.of(offset, pageSize).withSort(Sort.by(field).descending()));
 
+    }
+
+    @Override
+    public LastEmployeeNameAndSalaryResponseDto fetchByLastSalary() {
+
+        int by = employeeRepository.countRecords();
+        LastEmployeeNameAndSalaryDto lastEmployeeNameAndSalaryDto = employeeRepository.fetchByLastSalary();
+        LastEmployeeNameAndSalaryResponseDto lastEmployeeNameAndSalaryResponseDto = new LastEmployeeNameAndSalaryResponseDto();
+        lastEmployeeNameAndSalaryResponseDto.setRecordCount(by);
+        lastEmployeeNameAndSalaryResponseDto.setLastEmployeeNameAndSalaryList(lastEmployeeNameAndSalaryDto);
+        return lastEmployeeNameAndSalaryResponseDto;
+    }
+
+    @Override
+    public LastEmployeeNameAndSalaryMultipleResponseDto fetchByLastSalaryMultiple() {
+
+        int by = employeeRepository.countRecords();
+        List<LastEmployeeNameAndSalaryMultipleDto> lastEmployeeNameAndSalaryMultipleDtos = employeeRepository.fetchByLastSalaryMultiple();
+        LastEmployeeNameAndSalaryMultipleResponseDto lastEmployeeNameAndSalaryMultipleResponseDtos = new LastEmployeeNameAndSalaryMultipleResponseDto();
+        lastEmployeeNameAndSalaryMultipleResponseDtos.setRecordCount(by);
+        lastEmployeeNameAndSalaryMultipleResponseDtos.setLastEmployeeNameAndSalaryMultipleDtolist(lastEmployeeNameAndSalaryMultipleDtos);
+        return lastEmployeeNameAndSalaryMultipleResponseDtos;
     }
 }

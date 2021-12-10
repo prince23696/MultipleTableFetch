@@ -10,5 +10,5 @@ public interface EmployeeDetailsDto {
 
     String getGender();
 
-    String getdept_name();
+    String getDeptName();
 }
