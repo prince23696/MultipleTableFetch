@@ -32,7 +32,6 @@ public class AdviceController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<String>("No Value Present At DB According To your Request,Please Try With Another Request.", HttpStatus.NOT_FOUND);
     }
 
-
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException constraintViolationException) {
         return new ResponseEntity<String>("Constraint Violation Exception ", HttpStatus.NOT_FOUND);

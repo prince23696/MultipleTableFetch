@@ -1,19 +1,18 @@
 package com.MultipleTableFetch.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class Users {
 
     @Id
@@ -22,9 +21,15 @@ public class Users {
     private String fullName;
     private String email;
     private String dateOfBirth;
+    // @Enumerated(EnumType.STRING)
     private String role;
     private Long countryId;
     private String password;
     private String confirmPassword;
+    private String resetToken;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @JsonManagedReference
+    List<LoginHistory> loginHistoryList;
+
 
 }

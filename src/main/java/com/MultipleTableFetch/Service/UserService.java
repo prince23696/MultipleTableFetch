@@ -1,22 +1,37 @@
 package com.MultipleTableFetch.Service;
 
+import com.MultipleTableFetch.Dto.LogoutResponseDto;
+import com.MultipleTableFetch.Dto.UserDetailsResponseDto;
+
+import com.MultipleTableFetch.Dto.UserDtoClass;
 import com.MultipleTableFetch.Entity.Users;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    public List<Users> getAllUser();
+    public UserDetailsResponseDto getAllUser();
 
-    public Users getUser(int id);
+    public UserDetailsResponseDto getUser(int id);
 
-    public String addUser(Users user);
+    public UserDtoClass addUser(Users user);
 
-    public Users updateUser(int id, Users user);
+    public UserDtoClass updateUser(int id, Users user);
 
     public String deleteUser(int id);
 
-    public boolean isValidUser(int id);
+    public Users getUsers(String email);
 
+    public LogoutResponseDto logoutUser(String email);
+
+    public UserDtoClass changePassword(int id, String oldPassword, Users users);
+
+    public UserDtoClass findUserByResetToken(String resetToken, String password);
+
+    public UserDtoClass getUserDetailsByEmail(String email);
+
+    public UserDtoClass updateResetTokenInUSer(String token, int id);
+
+    public boolean isValidUser(int id);
 }
