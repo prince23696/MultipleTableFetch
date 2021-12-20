@@ -7,8 +7,6 @@ import com.MultipleTableFetch.Dto.UserDtoClass;
 import com.MultipleTableFetch.Entity.Users;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.Optional;
-
 public interface UserService extends UserDetailsService {
 
     public UserDetailsResponseDto getAllUser();
