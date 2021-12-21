@@ -95,9 +95,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public LogoutResponseDto logoutAdmin(String email) {
-        System.out.println(token2);
         arrayList1.add(token2);
-        System.out.println(arrayList1);
         LogoutResponseDto logoutResponseDto = new LogoutResponseDto();
         logoutResponseDto.setMessage("Successfully Logout Admin");
         return logoutResponseDto;
@@ -119,13 +117,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDtoClass findAdminByResetToken(String resetToken, String password) {
-        Admin byEmail = adminRepository.findByResetToken(resetToken);
+        Admin byResetToken = adminRepository.findByResetToken(resetToken);
         //  Admin byEmail = adminRepository.findByEmail(email);
-        System.out.println(byEmail);
-        if (byEmail.getResetToken().equalsIgnoreCase(resetToken)) {
-            byEmail.setPassword(password);
-            byEmail.setConfirmPassword(password);
-            Admin save = adminRepository.save(byEmail);
+        if (byResetToken.getResetToken().equalsIgnoreCase(resetToken)) {
+            byResetToken.setPassword(password);
+            byResetToken.setConfirmPassword(password);
+            Admin save = adminRepository.save(byResetToken);
             AdminDtoConverter adminDtoConverter = new AdminDtoConverter();
             AdminDtoClass adminDtoClass = adminDtoConverter.adminConverter(save);
             return adminDtoClass;
@@ -155,11 +152,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Admin user = adminRepository.findByEmail(username);
-        if (user == null) {
+        Admin admin = adminRepository.findByEmail(username);
+        if (admin == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(admin.getEmail(), admin.getPassword(), new ArrayList<>());
     }
 
     @Override

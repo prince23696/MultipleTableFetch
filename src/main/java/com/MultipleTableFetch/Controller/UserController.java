@@ -70,7 +70,7 @@ public class UserController {
 
     @PostMapping("/signUpUser")
     public ResponseEntity<Object> addUsers(@RequestBody Users user, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        if (user.getRole().equalsIgnoreCase("ROLE_USER")) {
+        if (user.getRole().equals("ROLE_USER")) {
             UserDtoClass userDtoClass = userService.addUser(user);
             if (userDtoClass != null)
                 return ResponseHandler.response(userDtoClass, "Successfully Created User With Given Details.", true, HttpStatus.OK);
@@ -81,8 +81,10 @@ public class UserController {
     }
 
     @PostMapping("/logoutUser/{email}")
-    public LogoutResponseDto logoutUser(@PathVariable String email) {
-        return userService.logoutUser(email);
+    public ResponseEntity<Object> logoutUser(@PathVariable String email) {
+        LogoutResponseDto logoutResponseDto = userService.logoutUser(email);
+        return ResponseHandler.response(logoutResponseDto, "", true, HttpStatus.OK);
+
     }
 
     @PostMapping("/changePassword/{id}/{oldPassword}")
@@ -138,26 +140,26 @@ public class UserController {
     public ResponseEntity<Object> generateToken(@RequestBody UserDto user, @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws Exception {
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-
+            Users users = userService.getUsers(user.getEmail());
+            UserDetails userDetails = this.userService.loadUserByUsername(user.getEmail());
+            if (users.getRole().equalsIgnoreCase("ROLE_USER")) {
+                String token = this.jwtUtil.generateToken(userDetails);
+                System.out.println("JWT : " + token);
+                token1 = token;
+                LoginHistory loginHistory = new LoginHistory(Calendar.getInstance().getTime(), users);
+                LoginHistory loginHistory1 = loginHistoryService.saveLoginDetails(loginHistory);
+                return ResponseEntity.ok(new UserResponse(user.getEmail(), token));
+            }
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
             throw new Exception("Bad Credentials");
-        }
-        Users users = userService.getUsers(user.getEmail());
-        UserDetails userDetails = this.userService.loadUserByUsername(user.getEmail());
-        if (users.getRole().equalsIgnoreCase("ROLE_USER")) {
-            String token = this.jwtUtil.generateToken(userDetails);
-            System.out.println("JWT : " + token);
-            token1 = token;
-            LoginHistory loginHistory = new LoginHistory(Calendar.getInstance().getTime(), users);
-            LoginHistory loginHistory1 = loginHistoryService.saveLoginDetails(loginHistory);
-            return ResponseEntity.ok(new UserResponse(user.getEmail(), token));
         }
         return new ResponseEntity<>("ROLE NOT ACCEPTED", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/sendEmail")
-    public ResponseEntity<Object> SendEmail(@RequestBody Email email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<Object> SendEmail(@RequestBody Email
+                                                    email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         String s = emailService.sendMailMessage(email.getSubject(), email.getMessage(), email.getTo());
         return ResponseHandler.response(s, "Email Send Successfully.", true, HttpStatus.OK);
     }

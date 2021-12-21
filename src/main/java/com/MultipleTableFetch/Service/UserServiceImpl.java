@@ -15,15 +15,12 @@ import java.util.List;
 
 import static com.MultipleTableFetch.Controller.UserController.token1;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 
     public static ArrayList arrayList = new ArrayList<>();
     @Autowired
     UserRepository usersRepository;
-    @Autowired
-    EmailService emailService;
 
     @Override
     public UserDtoClass addUser(Users user) {
@@ -59,14 +56,8 @@ public class UserServiceImpl implements UserService {
             UserDetailsResponseDto userDetailsResponseDto = new UserDetailsResponseDto();
             userDetailsResponseDto.setRecordCount(by);
             userDetailsResponseDto.setUserDetailsDto(byUserDetailsDto);
-            String subject = "demo mail";
-            String mail = "bhupendrasingh.yadav@oodles.io";
-            emailService.sendMailMessage(subject, "hello" + userDetailsResponseDto, mail);
             return userDetailsResponseDto;
         }
-        //   }
-//        return new ResponseEntity<>("User Currently logged out", HttpStatus.OK);
-        //   return ResponseHandler.response("", messageSource.getMessage(MessageConstant.BACK_TEXT, null, locale), false, HttpStatus.BAD_REQUEST);
         return null;
     }
 
@@ -88,7 +79,6 @@ public class UserServiceImpl implements UserService {
         }
         //   }
         return null;
-        //   return new ResponseEntity<>("User Currently logged out", HttpStatus.OK);
     }
 
     @Override
@@ -107,9 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LogoutResponseDto logoutUser(String email) {
-        System.out.println(token1);
         arrayList.add(token1);
-        System.out.println(arrayList);
         LogoutResponseDto logoutResponseDto = new LogoutResponseDto();
         logoutResponseDto.setMessage("Successfully Logout User");
         return logoutResponseDto;
@@ -133,7 +121,6 @@ public class UserServiceImpl implements UserService {
     public UserDtoClass findUserByResetToken(String resetToken, String password) {
         Users byEmail = usersRepository.findByResetToken(resetToken);
         //  Users byEmail = usersRepository.findByEmail(email);
-        System.out.println(byEmail);
         if (byEmail.getResetToken().equalsIgnoreCase(resetToken)) {
             byEmail.setPassword(password);
             byEmail.setConfirmPassword(password);

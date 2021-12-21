@@ -13,7 +13,7 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
     public Admin findByEmail(String username);
 
-    @Query(value = "select * from admin a where u.reset_token=?1 ", nativeQuery = true)
+    @Query(value = "select * from admin a where a.reset_token=?1 ", nativeQuery = true)
     Admin findByResetToken(String resetToken);
 
     @Query(value = "select count(id) from admin ", nativeQuery = true)

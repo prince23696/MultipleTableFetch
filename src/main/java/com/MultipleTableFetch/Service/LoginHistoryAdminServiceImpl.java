@@ -5,6 +5,8 @@ import com.MultipleTableFetch.Dto.LoginHistoryAdminResponseDto;
 import com.MultipleTableFetch.Entity.LoginHistoryAdmin;
 import com.MultipleTableFetch.Repository.LoginHistoryAdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class LoginHistoryAdminServiceImpl implements LoginHistoryAdminService {
     public LoginHistoryAdminResponseDto getLoginHistoryDetails() {
 
         int i = loginHistoryAdminRepository.countRecords();
+     //   loginHistoryAdminRepository.findAll(PageRequest.of(offset,pageSize));
         List<LoginHistoryAdminDto> byLoginDetailsDto = loginHistoryAdminRepository.findByLoginDetailsDto();
         LoginHistoryAdminResponseDto loginHistoryAdminResponseDto = new LoginHistoryAdminResponseDto();
         loginHistoryAdminResponseDto.setRecordCount(i);
