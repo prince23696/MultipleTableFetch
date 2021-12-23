@@ -11,14 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -31,8 +28,6 @@ public class AdminController {
     @Autowired
     AdminRepository adminRepository;
     @Autowired
-    SubjectService subjectService;
-    @Autowired
     LoginHistoryAdminService loginHistoryAdminService;
     @Autowired
     AuthenticationManager authenticationManager;
@@ -40,10 +35,6 @@ public class AdminController {
     EmailService emailService;
     @Autowired
     JwtUtil jwtUtil;
-    @Autowired
-    CategoryService categoryService;
-    @Autowired
-    SubCategoryService subCategoryService;
 
     @GetMapping("getAdmin")
     public ResponseEntity<Object> getAdmins(@RequestParam int id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
@@ -169,146 +160,5 @@ public class AdminController {
                                                     email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         String s = emailService.sendMailMessage(email.getSubject(), email.getMessage(), email.getTo());
         return ResponseHandler.response(s, "Email Send Successfully.", true, HttpStatus.OK);
-    }
-
-    @PostMapping("/AddCategory")
-    public ResponseEntity<Object> AddCategory(@RequestParam String categorySequence, @RequestParam String
-            categoryName, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                Category category = new Category(categorySequence, categoryName);
-                Category category1 = categoryService.addCategory(category);
-                return ResponseHandler.response(category1, "Category Added Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @GetMapping("/getCategory")
-    public ResponseEntity<Object> getCategory(@RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                List<Category> allCategory = categoryService.getAllCategory();
-                return ResponseHandler.response(allCategory, "All Category Fetched Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @PostMapping("/AddSubCategory")
-    public ResponseEntity<Object> AddSubCategory(@RequestParam int categoryId, @RequestParam String subCategorySequence, @RequestParam String
-            subCategoryName, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                SubCategory subCategory = new SubCategory(categoryId, subCategorySequence, subCategoryName);
-                SubCategory subCategory1 = subCategoryService.addSubCategory(subCategory);
-                return ResponseHandler.response(subCategory1, "SubCategory Added Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create SubCategory.", true, HttpStatus.OK);
-    }
-
-    @GetMapping("/getSubCategory")
-    public ResponseEntity<Object> getSubCategory(@RequestParam int categoryId, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                List<SubCategory> allSubCategory = subCategoryService.getAllSubCategory();
-                return ResponseHandler.response(allSubCategory, "All Sub Category Fetched Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @PostMapping("/AddSubject")
-    public ResponseEntity<Object> AddSubject(@RequestParam int subCategoryId, @RequestParam String subjectSequence, @RequestParam String
-            subjectName, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                Subject subject = new Subject(subCategoryId, subjectSequence, subjectName);
-                Subject subject1 = subjectService.addSubject(subject);
-                return ResponseHandler.response(subject1, "SubCategory Added Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create SubCategory.", true, HttpStatus.OK);
-    }
-
-    @GetMapping("/getSubject")
-    public ResponseEntity<Object> getSubject(@RequestParam int subCategoryId, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                List<SubCategory> allSubCategory = subCategoryService.getAllSubCategory();
-                return ResponseHandler.response(allSubCategory, "All Sub Category Fetched Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteCategory")
-    public ResponseEntity<Object> deleteCategory(@RequestParam int categoryId, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                Category category = categoryService.deleteCategory(categoryId);
-                return ResponseHandler.response(category, "Category Deleted Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteSubCategory")
-    public ResponseEntity<Object> deleteSubCategory(@RequestParam int subCategoryId, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                SubCategory subCategory = subCategoryService.deleteSubCategory(subCategoryId);
-                return ResponseHandler.response(subCategory, "SubCategory Deleted Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/deleteSubject")
-    public ResponseEntity<Object> deleteSubject(@RequestParam int subjectId, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        try {
-            this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
-            Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
-            if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                Subject subject = subjectService.deleteSubject(subjectId);
-                return ResponseHandler.response(subject, "Subject Deleted Successfully.", true, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseHandler.response("", "You Don't Have Correct Access Right To Create Category.", true, HttpStatus.OK);
     }
 }

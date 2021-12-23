@@ -1,22 +1,25 @@
 package com.MultipleTableFetch.Service;
 
+import com.MultipleTableFetch.Dto.SubCategoryUpdateDto;
+import com.MultipleTableFetch.Entity.Category;
 import com.MultipleTableFetch.Entity.SubCategory;
 import com.MultipleTableFetch.Repository.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Autowired
     SubCategoryRepository subCategoryRepository;
+    @Autowired
+    CategoryService categoryService;
 
     @Override
-    public List<SubCategory> getAllSubCategory() {
-        return subCategoryRepository.findAll();
+    public List<SubCategory> getAllSubCategory(int categoryId) {
+        return subCategoryRepository.findBySubCategoryDetailsDto(categoryId);
     }
 
     @Override
@@ -26,19 +29,17 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     public SubCategory addSubCategory(SubCategory subCategory) {
-        SubCategory save = subCategoryRepository.save(subCategory);
-        SubCategory subCategory1 = subCategoryRepository.findById(save.getSubCategoryId()).get();
-        subCategory1.setCategory(save.getCategory());
-        subCategoryRepository.save(subCategory1);
-        return  subCategory1;
+        return subCategoryRepository.save(subCategory);
+
     }
 
     @Override
-    public SubCategory updateSubCategory(int id, SubCategory subCategory) {
+    public SubCategory updateSubCategory(int id, SubCategoryUpdateDto subCategory) {
         SubCategory subCategory1 = subCategoryRepository.findById(id).get();
         subCategory1.setCategoryId(subCategory.getCategoryId());
         subCategory1.setSubCategoryName(subCategory.getSubCategoryName());
         subCategory1.setSubCategorySequence(subCategory.getSubCategorySequence());
+        subCategory1.setCategory(categoryService.getCategory(subCategory.getCategoryId()));
         subCategoryRepository.save(subCategory1);
         return subCategory1;
     }
@@ -48,5 +49,22 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         SubCategory subCategory = subCategoryRepository.findById(id).get();
         subCategoryRepository.deleteById(id);
         return subCategory;
+    }
+
+    @Override
+    public List<SubCategory> getSubCategoryByNameOrId(String name, Integer id) {
+        if (name == null && id != null) {
+            List<SubCategory> bySubCategoryDetailsById = subCategoryRepository.findBySubCategoryDetailsById(id);
+            return bySubCategoryDetailsById;
+        } else if (name != null && id == null) {
+            List<SubCategory> bySubCategoryDetailsByName = subCategoryRepository.findBySubCategoryDetailsByName(name);
+            return bySubCategoryDetailsByName;
+        } else if (name != null && id != null) {
+            List<SubCategory> bySubCategoryDetailsByName = subCategoryRepository.findBySubCategoryDetailsByNameAndId(id, name);
+            return bySubCategoryDetailsByName;
+        } else {
+            List<SubCategory> bySubCategoryDetailsByName = subCategoryRepository.findAll();
+            return bySubCategoryDetailsByName;
+        }
     }
 }

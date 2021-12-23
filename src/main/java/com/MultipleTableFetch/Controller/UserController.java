@@ -38,8 +38,8 @@ public class UserController {
     @Autowired
     JwtUtil jwtUtil;
 
-    @GetMapping("getUser/{id}")
-    public ResponseEntity<Object> getUsers(@PathVariable int id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    @GetMapping("getUser")
+    public ResponseEntity<Object> getUsers(@RequestParam int id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDetailsResponseDto user = userService.getUser(id);
         if (user != null)
             return ResponseHandler.response(user, "Successfully Getting Users.", true, HttpStatus.OK);
@@ -47,8 +47,8 @@ public class UserController {
             return ResponseHandler.response("", "Error in Getting User Try Again...", false, HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("getUserDetailsByEmail/{email}")
-    public ResponseEntity<Object> getUserDetailsByEmail(@PathVariable String email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    @GetMapping("getUserDetailsByEmail")
+    public ResponseEntity<Object> getUserDetailsByEmail(@RequestParam String email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDtoClass user = userService.getUserDetailsByEmail(email);
         if (user != null)
             return ResponseHandler.response(user, "Successfully Getting Users Details By Email.", true, HttpStatus.OK);
@@ -80,15 +80,15 @@ public class UserController {
         return ResponseHandler.response("", "Operation Failure Try Again", false, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/logoutUser/{email}")
-    public ResponseEntity<Object> logoutUser(@PathVariable String email) {
+    @PostMapping("/logoutUser")
+    public ResponseEntity<Object> logoutUser(@RequestParam String email) {
         LogoutResponseDto logoutResponseDto = userService.logoutUser(email);
         return ResponseHandler.response(logoutResponseDto, "", true, HttpStatus.OK);
 
     }
 
-    @PostMapping("/changePassword/{id}/{oldPassword}")
-    public ResponseEntity<Object> logoutUser(@PathVariable int id, @PathVariable String oldPassword, @RequestBody Users users, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    @PostMapping("/changePassword")
+    public ResponseEntity<Object> logoutUser(@RequestParam int id, @RequestParam String oldPassword, @RequestBody Users users, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDtoClass users1 = userService.changePassword(id, oldPassword, users);
         if (users1 != null)
             return ResponseHandler.response(users1, "Password Changed Successfully.", true, HttpStatus.OK);
@@ -96,14 +96,14 @@ public class UserController {
             return ResponseHandler.response("", "Error Password Not Changed.", false, HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public String deleteUsers(@PathVariable int id) {
+    @DeleteMapping("/deleteUser")
+    public String deleteUsers(@RequestParam int id) {
         userService.deleteUser(id);
         return "Users deleted form database id-" + id;
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<Object> updateUsers(@PathVariable int id, @RequestBody Users user, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    @PutMapping("/updateUser")
+    public ResponseEntity<Object> updateUsers(@RequestParam int id, @RequestBody Users user, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDtoClass users = userService.updateUser(id, user);
         if (users != null)
             return ResponseHandler.response(users, "User Updated Successfully.", true, HttpStatus.OK);
@@ -127,13 +127,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/findUserByResetToken/{resetToken}/{newPassword}")
-    public ResponseEntity<Object> findUserByResetToken(@PathVariable String resetToken, @PathVariable String newPassword, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    @PostMapping("/findUserByResetToken")
+    public ResponseEntity<Object> findUserByResetToken(@RequestParam String resetToken, @RequestParam String newPassword, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         UserDtoClass userByResetToken = userService.findUserByResetToken(resetToken, newPassword);
         if (userByResetToken != null)
-            return ResponseHandler.response(userByResetToken, "Successfully Performed Token Generation Operation.", true, HttpStatus.OK);
+            return ResponseHandler.response(userByResetToken, "Successfully Performed Forget Password Operation.", true, HttpStatus.OK);
         else
-            return ResponseHandler.response("", "Token Generation Operation Failure.", false, HttpStatus.BAD_REQUEST);
+            return ResponseHandler.response("", "Forget Password Operation Failure.", false, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/signInUser")
@@ -158,8 +158,7 @@ public class UserController {
     }
 
     @PostMapping("/sendEmail")
-    public ResponseEntity<Object> SendEmail(@RequestBody Email
-                                                    email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<Object> SendEmail(@RequestBody Email email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         String s = emailService.sendMailMessage(email.getSubject(), email.getMessage(), email.getTo());
         return ResponseHandler.response(s, "Email Send Successfully.", true, HttpStatus.OK);
     }

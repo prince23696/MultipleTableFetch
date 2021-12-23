@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subCategoryName","subCategorySequence"}))
 public class SubCategory {
 
     @Id
@@ -21,10 +22,10 @@ public class SubCategory {
     private int categoryId;
     private String subCategorySequence;
     private String subCategoryName;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private Category category;
-    @OneToMany
+    @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Subject> subjects;
 

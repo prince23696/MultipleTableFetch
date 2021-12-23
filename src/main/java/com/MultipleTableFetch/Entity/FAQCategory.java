@@ -12,20 +12,17 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"categoryName", "categorySequence"}))
-public class Category {
+public class FAQCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int categoryId;
-    private String categorySequence;
+    private int faqCategoryId;
     private String categoryName;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "faqCategory", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<SubCategory> subCategory;
+    private List<FAQTopic> faqTopicList;
 
-    public Category(String categorySequence, String categoryName) {
-        this.categorySequence = categorySequence;
+    public FAQCategory(String categoryName) {
         this.categoryName = categoryName;
     }
 }

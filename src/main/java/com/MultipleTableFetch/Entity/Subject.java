@@ -11,6 +11,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subjectName","subjectSequence"}))
 public class Subject {
 
     @Id
@@ -19,7 +20,7 @@ public class Subject {
     private int subCategoryId;
     private String subjectSequence;
     private String subjectName;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private SubCategory subCategory;
 
