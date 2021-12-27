@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -30,6 +30,9 @@ public class Users {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
     List<LoginHistory> loginHistoryList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @JsonManagedReference
+    List<Course> courseList;
 
 
 }

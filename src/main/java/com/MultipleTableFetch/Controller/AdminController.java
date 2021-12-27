@@ -22,7 +22,8 @@ import java.util.Locale;
 public class AdminController {
 
     public static String token2;
-
+    @Autowired
+    CourseService courseService;
     @Autowired
     AdminService adminService;
     @Autowired
@@ -156,9 +157,28 @@ public class AdminController {
     }
 
     @PostMapping("/sendEmailAdmin")
-    public ResponseEntity<Object> SendEmail(@RequestBody Email
-                                                    email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<Object> SendEmail(@RequestBody Email email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         String s = emailService.sendMailMessage(email.getSubject(), email.getMessage(), email.getTo());
         return ResponseHandler.response(s, "Email Send Successfully.", true, HttpStatus.OK);
+    }
+
+    @PostMapping("/checkAdminEmailExistOrNot")
+    public ResponseEntity<Object> checkAdminEmailExistOrNot(@RequestParam String email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+
+        Boolean aBoolean = adminService.checkAdminEmailExistOrNot(email);
+        if (aBoolean)
+            return ResponseHandler.response("", "Admin Email Already Exists.", true, HttpStatus.OK);
+        else
+            return ResponseHandler.response("", "Admin Email Available For Creating Account.", false, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/ApproveRejectCourse")
+    public ResponseEntity<Object> ApproveRejectCourse(@RequestParam Long courseId, @RequestParam CourseEnum status, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+        Course course = courseService.getCourse(courseId);
+        String s = String.valueOf(status);
+        course.setStatus(s);
+        Course course1 = courseService.updateCourse(courseId, course);
+        return ResponseHandler.response(course1, "Operation Performed On Api.", true, HttpStatus.OK);
+        //  return ResponseHandler.response("", "Admin Not Updated Check Details.", false, HttpStatus.BAD_REQUEST);
     }
 }

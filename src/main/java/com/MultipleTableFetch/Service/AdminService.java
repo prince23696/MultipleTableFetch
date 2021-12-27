@@ -30,5 +30,7 @@ public interface AdminService extends UserDetailsService {
 
     public AdminDtoClass updateResetTokenInUSer(String token, int id);
 
+    public Boolean checkAdminEmailExistOrNot(String email);
+
     public boolean isValidAdmin(int id);
 }

@@ -162,4 +162,24 @@ public class UserController {
         String s = emailService.sendMailMessage(email.getSubject(), email.getMessage(), email.getTo());
         return ResponseHandler.response(s, "Email Send Successfully.", true, HttpStatus.OK);
     }
+
+    @PostMapping("/checkEmailExistOrNot")
+    public ResponseEntity<Object> checkEmailExistOrNot(@RequestParam String email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+
+        Boolean aBoolean = userService.checkEmailExistOrNot(email);
+        if (aBoolean)
+            return ResponseHandler.response(aBoolean, "Email Already Exists. ", true, HttpStatus.OK);
+        else
+            return ResponseHandler.response("", "Email Available For Creating Account.", false, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/checkEmailAndFetchSpecificData")
+    public ResponseEntity<Object> checkEmailAndFetchSpecificData(@RequestParam String email, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+
+        UserDetailsWithEmailResponseDto userDetailsWithEmailResponseDto = userService.checkEmailAndFetchSpecificData(email);
+        if (!userDetailsWithEmailResponseDto.getUserDetailsWithEmailResponseDtoList().isEmpty())
+            return ResponseHandler.response(userDetailsWithEmailResponseDto, "Specific Data For User Using Email Id. ", true, HttpStatus.OK);
+        else
+            return ResponseHandler.response("", "Email Not Exist in Database.", false, HttpStatus.BAD_REQUEST);
+    }
 }

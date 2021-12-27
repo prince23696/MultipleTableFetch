@@ -8,7 +8,6 @@ import com.MultipleTableFetch.Entity.Subject;
 import com.MultipleTableFetch.Repository.AdminRepository;
 import com.MultipleTableFetch.Repository.CategoryRepository;
 import com.MultipleTableFetch.Service.*;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,6 @@ import java.util.Locale;
 @RestController
 public class CategoryController {
 
-    @Autowired
-    CategoryRepository categoryRepository;
     @Autowired
     AdminRepository adminRepository;
     @Autowired

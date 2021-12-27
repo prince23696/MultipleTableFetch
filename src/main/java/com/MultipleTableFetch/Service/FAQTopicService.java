@@ -16,4 +16,6 @@ public interface FAQTopicService {
     public FAQTopic updateFAQTopic(int id, FAQTopicUpdateDto faqTopicUpdateDto);
 
     public FAQTopic deleteFAQTopic(int id);
+
+    public List<FAQTopic> getFAQTopicByNameOrId(Integer id, String name);
 }

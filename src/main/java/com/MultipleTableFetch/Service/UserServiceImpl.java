@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Users getUserUsingId(int id) {
+        return usersRepository.findById(id).get();
+    }
+
+    @Override
     public UserDtoClass updateUser(int id, Users user) {
         //    if (isValidUser(id)) {
         if (!arrayList.contains(token1)) {
@@ -120,7 +125,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtoClass findUserByResetToken(String resetToken, String password) {
         Users byEmail = usersRepository.findByResetToken(resetToken);
-        //  Users byEmail = usersRepository.findByEmail(email);
         if (byEmail.getResetToken().equalsIgnoreCase(resetToken)) {
             byEmail.setPassword(password);
             byEmail.setConfirmPassword(password);
@@ -149,6 +153,28 @@ public class UserServiceImpl implements UserService {
         UserDtoConverter userDtoConverter = new UserDtoConverter();
         UserDtoClass userDtoClass = userDtoConverter.userConverter(save);
         return userDtoClass;
+    }
+
+    @Override
+    public Boolean checkEmailExistOrNot(String email) {
+       /* Boolean aBoolean = usersRepository.checkEmailExistInUserOrNot(email);
+        return aBoolean;*/
+        if (usersRepository.checkEmailExistInUserOrNot(email)) {
+            return true;
+        } else if (usersRepository.checkEmailExistAdminOrNot(email)) {
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    public UserDetailsWithEmailResponseDto checkEmailAndFetchSpecificData(String email) {
+        int by = usersRepository.countRecords();
+        List<UserDetailsWithEmailCheckDto> userDetailsWithEmailCheckDtos = usersRepository.checkEmailAndFetchSpecificData(email);
+        UserDetailsWithEmailResponseDto userDetailsWithEmailResponseDto = new UserDetailsWithEmailResponseDto();
+        userDetailsWithEmailResponseDto.setRecordCount(by);
+        userDetailsWithEmailResponseDto.setUserDetailsWithEmailResponseDtoList(userDetailsWithEmailCheckDtos);
+        return userDetailsWithEmailResponseDto;
     }
 
     @Override

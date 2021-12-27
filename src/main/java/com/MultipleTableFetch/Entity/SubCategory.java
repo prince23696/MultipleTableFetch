@@ -10,10 +10,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subCategoryName","subCategorySequence"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"subCategoryName", "subCategorySequence"}))
 public class SubCategory {
 
     @Id
@@ -28,6 +28,9 @@ public class SubCategory {
     @OneToMany(mappedBy = "subCategory", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Subject> subjects;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subCategory")
+    @JsonManagedReference
+    private List<Course> course;
 
     public SubCategory(int categoryId, String subCategorySequence, String subCategoryName) {
         this.categoryId = categoryId;

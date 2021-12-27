@@ -2,6 +2,7 @@ package com.MultipleTableFetch.Service;
 
 import com.MultipleTableFetch.Dto.FAQQuestionAnswerUpdateDto;
 import com.MultipleTableFetch.Entity.FAQQuestionAnswer;
+import com.MultipleTableFetch.Entity.FAQTopic;
 import com.MultipleTableFetch.Repository.FAQQuestionAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,5 +48,22 @@ public class FAQQuestionAnswerServiceImpl implements FAQQuestionAnswerService {
         FAQQuestionAnswer faqQuestionAnswer = faqQuestionAnswerRepository.findById(id).get();
         faqQuestionAnswerRepository.deleteById(id);
         return faqQuestionAnswer;
+    }
+
+    @Override
+    public List<FAQQuestionAnswer> getFAQQuestionByNameOrId(Integer id, String name) {
+        if (name == null && id != null) {
+            List<FAQQuestionAnswer> byFAQTopicDetailsById = faqQuestionAnswerRepository.findByFAQQuestionDetailsById(id);
+            return byFAQTopicDetailsById;
+        } else if (name != null && id == null) {
+            List<FAQQuestionAnswer> byFAQTopicDetailsByName = faqQuestionAnswerRepository.findByFAQQuestionDetailsByName(name);
+            return byFAQTopicDetailsByName;
+        } else if (name != null && id != null) {
+            List<FAQQuestionAnswer> byFAQTopicDetailsByName = faqQuestionAnswerRepository.findByFAQQuestionDetailsByNameAndId(id, name);
+            return byFAQTopicDetailsByName;
+        } else {
+            List<FAQQuestionAnswer> all = faqQuestionAnswerRepository.findAll();
+            return all;
+        }
     }
 }

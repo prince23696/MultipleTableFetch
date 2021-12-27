@@ -16,4 +16,7 @@ public interface FAQQuestionAnswerService {
     public FAQQuestionAnswer updateFAQQuestionAnswer(int id, FAQQuestionAnswerUpdateDto faqQuestionAnswerUpdateDto);
 
     public FAQQuestionAnswer deleteFAQQuestionAnswer(int id);
+
+    public List<FAQQuestionAnswer> getFAQQuestionByNameOrId(Integer id, String name);
+
 }

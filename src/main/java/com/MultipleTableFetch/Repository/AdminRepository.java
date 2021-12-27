@@ -26,4 +26,10 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
     @Query(value = "select u.id as id, u.full_name as fullName, u.email as email,u.date_of_birth as dateOfBirth,"
             + " u.country_id as CountryId,u.role as Role from admin u where u.id=?1", nativeQuery = true)
     public List<AdminDetailsDto> findByAdminDetailsDtoById(int id);
+
+    @Query(value = "SELECT EXISTS(select * from users u where u.email =:email)", nativeQuery = true)
+    public Boolean checkEmailExistInUserOrNot(String email);
+
+    @Query(value = "SELECT EXISTS(select * from admin a where a.email =:email)", nativeQuery = true)
+    public Boolean checkEmailExistAdminOrNot(String email);
 }

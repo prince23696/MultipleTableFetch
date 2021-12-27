@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"categoryName", "categorySequence"}))
@@ -23,6 +23,10 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<SubCategory> subCategory;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Course> course;
 
     public Category(String categorySequence, String categoryName) {
         this.categorySequence = categorySequence;

@@ -150,6 +150,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Boolean checkAdminEmailExistOrNot(String email) {
+        if (adminRepository.checkEmailExistAdminOrNot(email)) {
+            return true;
+        } else if (adminRepository.checkEmailExistInUserOrNot(email)) {
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Admin admin = adminRepository.findByEmail(username);

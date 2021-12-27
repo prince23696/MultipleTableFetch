@@ -1,6 +1,7 @@
 package com.MultipleTableFetch.Service;
 
 import com.MultipleTableFetch.Dto.FAQTopicUpdateDto;
+import com.MultipleTableFetch.Entity.FAQCategory;
 import com.MultipleTableFetch.Entity.FAQTopic;
 import com.MultipleTableFetch.Repository.FAQTopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,22 @@ public class FAQTopicServiceImpl implements FAQTopicService {
         FAQTopic faqTopic = faqTopicRepository.findById(id).get();
         faqTopicRepository.deleteById(id);
         return faqTopic;
+    }
+
+    @Override
+    public List<FAQTopic> getFAQTopicByNameOrId(Integer id, String name) {
+        if (name == null && id != null) {
+            List<FAQTopic> byFAQTopicDetailsById = faqTopicRepository.findByFAQTopicDetailsById(id);
+            return byFAQTopicDetailsById;
+        } else if (name != null && id == null) {
+            List<FAQTopic> byFAQTopicDetailsByName = faqTopicRepository.findByFAQTopicDetailsByName(name);
+            return byFAQTopicDetailsByName;
+        } else if (name != null && id != null) {
+            List<FAQTopic> byFAQTopicDetailsByName = faqTopicRepository.findByFAQTopicDetailsByNameAndId(id, name);
+            return byFAQTopicDetailsByName;
+        } else {
+            List<FAQTopic> all = faqTopicRepository.findAll();
+            return all;
+        }
     }
 }

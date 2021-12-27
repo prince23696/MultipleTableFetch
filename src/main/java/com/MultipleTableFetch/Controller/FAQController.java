@@ -257,22 +257,22 @@ public class FAQController {
             Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
             if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
                 List<FAQCategory> faqCategoryByNameOrId = faqCategoryService.getFAQCategoryByNameOrId(id, name);
-                return ResponseHandler.response(faqCategoryByNameOrId, "All Category Fetched Successfully.", true, HttpStatus.OK);
+                return ResponseHandler.response(faqCategoryByNameOrId, "All FAQ Category Fetched Successfully.", true, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseHandler.response("", "You Don't Have Correct Access Right To Access This Api.", true, HttpStatus.OK);
     }
-/*
+
     @PostMapping("/getFAQTopicByNameOrId")
     public ResponseEntity<Object> getFAQTopicByNameOrId(@RequestParam(required = false) String name, @RequestParam(required = false) Integer id, @RequestBody AdminDto adminDto, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
             Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
             if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                List<SubCategory> subCategoryByNameOrId = subCategoryService.getSubCategoryByNameOrId(name, id);
-                return ResponseHandler.response(subCategoryByNameOrId, "All Sub Category Fetched Successfully.", true, HttpStatus.OK);
+                List<FAQTopic> faqTopicByNameOrId = faqTopicService.getFAQTopicByNameOrId(id, name);
+                return ResponseHandler.response(faqTopicByNameOrId, "All FAQ Topic Fetched Successfully.", true, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -286,12 +286,12 @@ public class FAQController {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDto.getEmail(), adminDto.getPassword()));
             Admin admin1 = adminRepository.findByEmail(adminDto.getEmail());
             if (admin1.getRole().equalsIgnoreCase("ROLE_ADMIN")) {
-                List<Subject> subjectByNameOrId = subjectService.getSubjectByNameOrId(name, id);
-                return ResponseHandler.response(subjectByNameOrId, "All Subject Fetched Successfully.", true, HttpStatus.OK);
+                List<FAQQuestionAnswer> faqQuestionByNameOrId = faqQuestionAnswerService.getFAQQuestionByNameOrId(id, name);
+                return ResponseHandler.response(faqQuestionByNameOrId, "All FAQ Question Fetched Successfully.", true, HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseHandler.response("", "You Don't Have Correct Access Right To Access This Api.", true, HttpStatus.OK);
-    }*/
+    }
 }

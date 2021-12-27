@@ -1,6 +1,6 @@
 package com.MultipleTableFetch.Entity;
 
-public enum Role_Enum {
+public enum RoleEnum {
 
     ROLE_LEARNER, ROLE_ADMIN, ROLE_GUIDE;
 }

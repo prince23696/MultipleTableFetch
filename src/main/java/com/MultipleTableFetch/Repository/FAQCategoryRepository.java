@@ -2,7 +2,6 @@ package com.MultipleTableFetch.Repository;
 
 import com.MultipleTableFetch.Dto.FAQCategoryDetailsDto;
 import com.MultipleTableFetch.Entity.FAQCategory;
-import com.MultipleTableFetch.Entity.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,9 +23,9 @@ public interface FAQCategoryRepository extends JpaRepository<FAQCategory, Intege
     @Query(value = "select * from faqcategory f where f.category_name like %:name% ", nativeQuery = true)
     public List<FAQCategory> findByFAQCategoryDetailsByName(String name);
 
-    @Query(value = "select * from faqcategory f where f.faq_category_id=?1 or c.category_name like %:name%", nativeQuery = true)
+    @Query(value = "select * from faqcategory f where f.faq_category_id=:id or c.category_name like %:name%", nativeQuery = true)
     public List<FAQCategory> findByFAQCategoryDetailsByNameAndId(int id, String name);
 
-    @Query(value = "SELECT EXISTS(select * from faqcategory f where f.category_name =?1)", nativeQuery = true)
+    @Query(value = "SELECT EXISTS(select * from faqcategory f where f.category_name =:name)", nativeQuery = true)
     public Boolean findByFAQCategoryByCategoryName(String name);
 }
