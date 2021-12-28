@@ -5,8 +5,10 @@ import com.MultipleTableFetch.Dto.CourseDetailsResponseDto;
 import com.MultipleTableFetch.Dto.CourseDto;
 import com.MultipleTableFetch.Dto.CourseResponseDtoQuery;
 import com.MultipleTableFetch.Entity.Course;
+import com.MultipleTableFetch.Entity.CourseRating;
 import com.MultipleTableFetch.Helper.Pair;
 import com.MultipleTableFetch.Helper.Utils;
+import com.MultipleTableFetch.Repository.CourseRatingRepository;
 import com.MultipleTableFetch.Repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,8 @@ public class CourseServiceImpl implements CourseService {
     SubCategoryService subCategoryService;
     @Autowired
     SubjectService subjectService;
+    @Autowired
+    CourseRatingRepository courseRatingRepository;
 
     @Override
     public CourseDetailsResponseDto getAllCourse() {
@@ -131,5 +135,15 @@ public class CourseServiceImpl implements CourseService {
         courseResponseDtoQuery.setRecordCount(i);
         courseResponseDtoQuery.setCourseStatusDtoList(byCourseDetailsByCourseStatus);
         return courseResponseDtoQuery;
+    }
+
+    @Override
+    public CourseRating addCourseRating(CourseRating courseRating) {
+        CourseRating save = courseRatingRepository.save(courseRating);
+        float averageByCourseId = courseRatingRepository.findAverageByCourseId(courseRating.getCourseId());
+        Course byId = courseRepository.findById(courseRating.getCourseId()).get();
+        byId.setRating(averageByCourseId);
+        courseRepository.save(byId);
+        return save;
     }
 }

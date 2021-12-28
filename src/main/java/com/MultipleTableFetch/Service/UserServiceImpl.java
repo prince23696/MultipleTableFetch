@@ -1,7 +1,9 @@
 package com.MultipleTableFetch.Service;
 
 import com.MultipleTableFetch.Dto.*;
+import com.MultipleTableFetch.Entity.GuideRating;
 import com.MultipleTableFetch.Entity.Users;
+import com.MultipleTableFetch.Repository.GuideRatingRepository;
 import com.MultipleTableFetch.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,8 @@ public class UserServiceImpl implements UserService {
     public static ArrayList arrayList = new ArrayList<>();
     @Autowired
     UserRepository usersRepository;
+    @Autowired
+    GuideRatingRepository guideRatingRepository;
 
     @Override
     public UserDtoClass addUser(Users user) {
@@ -201,5 +205,20 @@ public class UserServiceImpl implements UserService {
             }
         }
         return false;
+    }
+
+    @Override
+    public GuideRating addGuideRating(GuideRating guideRating) {
+        return guideRatingRepository.save(guideRating);
+    }
+
+    @Override
+    public List<GuideRating> getAllGuide() {
+        return guideRatingRepository.findAll();
+    }
+
+    @Override
+    public GuideRating getGuideRating(Long guideId) {
+        return guideRatingRepository.findById(guideId).get();
     }
 }

@@ -1,14 +1,15 @@
 package com.MultipleTableFetch.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course {
@@ -28,6 +29,7 @@ public class Course {
     private String currencyType;
     private Long price;
     private String status;
+    private float rating;
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private Users users;
@@ -40,4 +42,7 @@ public class Course {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private Subject subject;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    @JsonManagedReference
+    private List<Comment> comments;
 }

@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -33,6 +32,11 @@ public class Users {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
     List<Course> courseList;
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @JsonManagedReference
+    List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @JsonManagedReference
+    List<CommentReply> commentReplies;
 
 }
