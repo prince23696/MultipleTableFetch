@@ -28,15 +28,17 @@ public class Users {
     private String resetToken;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
-    List<LoginHistory> loginHistoryList;
+    private List<LoginHistory> loginHistoryList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
-    List<Course> courseList;
+    private List<Course> courseList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
-    List<Comment> comments;
+    private List<Comment> comments;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference
-    List<CommentReply> commentReplies;
-
+    private List<CommentReply> commentReplies;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    @JsonManagedReference
+    private List<CreateAssignment> createAssignments;
 }

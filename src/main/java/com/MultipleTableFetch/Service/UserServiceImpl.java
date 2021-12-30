@@ -182,6 +182,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public GuideRatingResponseDto addGuideRating(GuideRating guideRating) {
+        GuideRating save = guideRatingRepository.save(guideRating);
+        int i = guideRatingRepository.countRecords();
+        GuideRatingResponseDto guideRatingResponseDto = new GuideRatingResponseDto();
+        guideRatingResponseDto.setRecordCount(i);
+        guideRatingResponseDto.setGuideRatingDto(save);
+        return guideRatingResponseDto;
+    }
+
+    @Override
+    public GuideRatingResponseDto getAllGuide() {
+        int i = guideRatingRepository.countRecords();
+        List<GuideRating> all = guideRatingRepository.findAll();
+        GuideRatingResponseDto guideRatingResponseDto = new GuideRatingResponseDto();
+        guideRatingResponseDto.setRecordCount(i);
+        guideRatingResponseDto.setGuideRatingsList(all);
+        return guideRatingResponseDto;
+    }
+
+    @Override
+    public GuideRatingResponseDto getGuideRating(Long guideId) {
+        int i = guideRatingRepository.countRecords();
+        GuideRating guideRating = guideRatingRepository.findById(guideId).get();
+        GuideRatingResponseDto guideRatingResponseDto = new GuideRatingResponseDto();
+        guideRatingResponseDto.setRecordCount(i);
+        guideRatingResponseDto.setGuideRatingDto(guideRating);
+        return guideRatingResponseDto;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Users user = usersRepository.findByEmail(username);
@@ -205,20 +235,5 @@ public class UserServiceImpl implements UserService {
             }
         }
         return false;
-    }
-
-    @Override
-    public GuideRating addGuideRating(GuideRating guideRating) {
-        return guideRatingRepository.save(guideRating);
-    }
-
-    @Override
-    public List<GuideRating> getAllGuide() {
-        return guideRatingRepository.findAll();
-    }
-
-    @Override
-    public GuideRating getGuideRating(Long guideId) {
-        return guideRatingRepository.findById(guideId).get();
     }
 }

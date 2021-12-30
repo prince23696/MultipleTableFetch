@@ -1,10 +1,7 @@
 package com.MultipleTableFetch.Service;
 
-import com.MultipleTableFetch.Dto.LogoutResponseDto;
-import com.MultipleTableFetch.Dto.UserDetailsResponseDto;
+import com.MultipleTableFetch.Dto.*;
 
-import com.MultipleTableFetch.Dto.UserDetailsWithEmailResponseDto;
-import com.MultipleTableFetch.Dto.UserDtoClass;
 import com.MultipleTableFetch.Entity.GuideRating;
 import com.MultipleTableFetch.Entity.Users;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,9 +40,9 @@ public interface UserService extends UserDetailsService {
 
     public boolean isValidUser(int id);
 
-    public GuideRating addGuideRating(GuideRating guideRating);
+    public GuideRatingResponseDto addGuideRating(GuideRating guideRating);
 
-    public List<GuideRating> getAllGuide();
+    public GuideRatingResponseDto getAllGuide();
 
-    public GuideRating getGuideRating(Long guideId);
+    public GuideRatingResponseDto getGuideRating(Long guideId);
 }

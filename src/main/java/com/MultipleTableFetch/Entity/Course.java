@@ -45,4 +45,7 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     @JsonManagedReference
     private List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    @JsonManagedReference
+    private List<CreateAssignment> createAssignments;
 }

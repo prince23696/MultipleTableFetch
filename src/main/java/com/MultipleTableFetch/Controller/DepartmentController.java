@@ -14,8 +14,8 @@ public class DepartmentController {
     @Autowired
     DepartmentService departmentService;
 
-    @GetMapping("getDepartment/{id}")
-    public Department getDepartment(@PathVariable int id) {
+    @GetMapping("getDepartment")
+    public Department getDepartment(@RequestParam int id) {
         Department department = departmentService.getDepartment(id);
         return department;
     }
@@ -31,16 +31,15 @@ public class DepartmentController {
         return department;
     }
 
-    @DeleteMapping("/deleteDepartment/{id}")
-    public String deleteDepartment(@PathVariable int id) {
+    @DeleteMapping("/deleteDepartment")
+    public String deleteDepartment(@RequestParam int id) {
         departmentService.deleteDepartment(id);
         return "Department deleted form database id-" + id;
     }
 
-    @PutMapping("/updateDepartment/{id}")
-    public Department updateDepartment(@PathVariable int id, @RequestBody Department department) {
+    @PutMapping("/updateDepartment")
+    public Department updateDepartment(@RequestParam int id, @RequestBody Department department) {
         departmentService.updateDepartment(id, department);
         return department;
     }
-
 }

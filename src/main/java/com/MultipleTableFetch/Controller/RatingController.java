@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -95,19 +94,19 @@ public class RatingController {
 
     @PostMapping("postGuideRating")
     public ResponseEntity<Object> postGuideRating(@RequestBody GuideRating guideRating, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        GuideRating guideRating1 = userService.addGuideRating(guideRating);
+        GuideRatingResponseDto guideRating1 = userService.addGuideRating(guideRating);
         return ResponseHandler.response(guideRating1, "Successfully Posted Guide Rating.", true, HttpStatus.OK);
     }
 
     @GetMapping("getAllGuideRating")
     public ResponseEntity<Object> getAllGuideRating(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        List<GuideRating> allGuide = userService.getAllGuide();
+        GuideRatingResponseDto allGuide = userService.getAllGuide();
         return ResponseHandler.response(allGuide, "Successfully Get All Guide Rating.", true, HttpStatus.OK);
     }
 
     @GetMapping("getGuideRating")
     public ResponseEntity<Object> getGuideRating(@RequestParam Long guideId, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        GuideRating guide = userService.getGuideRating(guideId);
+        GuideRatingResponseDto guide = userService.getGuideRating(guideId);
         return ResponseHandler.response(guide, "Successfully Get AGuide Rating.", true, HttpStatus.OK);
     }
 }
