@@ -3,11 +3,17 @@ package com.MultipleTableFetch.Service;
 import com.MultipleTableFetch.Dto.AssignmentDto;
 import com.MultipleTableFetch.Dto.AssignmentResponseDto;
 import com.MultipleTableFetch.Entity.CreateAssignment;
+import com.MultipleTableFetch.Entity.UploadQuiz;
 import com.MultipleTableFetch.Repository.AssignmentRepository;
+import com.MultipleTableFetch.Repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
@@ -18,6 +24,8 @@ public class AssignmentServiceImpl implements AssignmentService {
     CourseService courseService;
     @Autowired
     UserService userService;
+    @Autowired
+    QuizRepository quizRepository;
 
     @Override
     public AssignmentResponseDto getAllAssignment() {
@@ -68,5 +76,19 @@ public class AssignmentServiceImpl implements AssignmentService {
         CreateAssignment createAssignment = assignmentRepository.findById(id).get();
         assignmentRepository.deleteById(id);
         return createAssignment;
+    }
+
+    @Override
+    public void save(MultipartFile file) throws IOException {
+        UploadQuiz uploadQuiz = new UploadQuiz();
+        uploadQuiz.setQuizName(StringUtils.cleanPath(file.getOriginalFilename()));
+        //uploadQuiz.setQuizFile(file.getBytes());
+        UploadQuiz save = quizRepository.save(uploadQuiz);
+        return;
+    }
+
+    @Override
+    public Optional<UploadQuiz> getFile(Long id) {
+        return quizRepository.findById(id);
     }
 }

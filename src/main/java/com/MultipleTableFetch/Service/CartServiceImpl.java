@@ -68,12 +68,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartResponseDto deleteAllFromCart(int userId) {
-        int i = cartRepository.countRecords();
-        List<Cart> all = cartRepository.findFromCartByUserId(userId);
         CartResponseDto cartResponseDto = new CartResponseDto();
+        List<Cart> cartList = cartRepository.deleteAllRecordFromCart(userId);
+        int i = cartRepository.countRecords();
         cartResponseDto.setRecordCount(i);
-        cartResponseDto.setCartList(all);
-        cartRepository.deleteAllRecordFromCart(userId);
+        cartResponseDto.setCartList(cartList);
         return cartResponseDto;
     }
 
@@ -107,12 +106,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public WishListResponseDto deleteAllFromWishList(int userId) {
-        int i = wishListRepository.countRecords();
-        List<WishList> all = wishListRepository.findFromWishListByUserId(userId);
         WishListResponseDto wishListResponseDto = new WishListResponseDto();
+        List<WishList> wishLists = wishListRepository.deleteAllRecordFromWishList(userId);
+        int i = wishListRepository.countRecords();
         wishListResponseDto.setRecordCount(i);
-        wishListResponseDto.setWishLists(all);
-        wishListRepository.deleteAllRecordFromWishList(userId);
+        wishListResponseDto.setWishLists(wishLists);
         return wishListResponseDto;
     }
 

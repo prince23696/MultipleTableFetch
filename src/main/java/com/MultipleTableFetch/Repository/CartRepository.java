@@ -21,11 +21,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query(value = "select * from cart c where c.course_id=?1 and c.user_id=?2", nativeQuery = true)
     public Cart getCartRecord(Long courseId, int userId);
 
-    @Query(value = "delete from cart c where c.course_id=:course and c.user_id=:u", nativeQuery = true)
-    public int deleteRecordFromCart(@Param("course") Long courseId, @Param("u") int userId);
-
-    @Query(value = "delete from cart c where c.user_id=:u", nativeQuery = true)
-    public int deleteAllRecordFromCart(@Param("u") int userId);
+    @Query(value = "delete from cart c where c.user_id=:u RETURNING *", nativeQuery = true)
+    public List<Cart> deleteAllRecordFromCart(@Param("u") int userId);
 
     @Query(value = "select * from cart c where c.user_id=:u", nativeQuery = true)
     public List<Cart> findFromCartByUserId(@Param("u") int userId);

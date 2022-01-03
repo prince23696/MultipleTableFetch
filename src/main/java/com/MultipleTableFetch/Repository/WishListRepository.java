@@ -20,8 +20,8 @@ public interface WishListRepository extends JpaRepository<WishList, Long> {
     @Query(value = "select * from wish_list c where c.course_id=?1 and c.user_id=?2 ", nativeQuery = true)
     public WishList getWishListRecord(Long courseId, int userId);
 
-    @Query(value = "delete from wish_list c where c.user_id IN=:u", nativeQuery = true)
-    public int deleteAllRecordFromWishList(@Param("u") int userId);
+    @Query(value = "delete from wish_list c where c.user_id=:u RETURNING *", nativeQuery = true)
+    public List<WishList> deleteAllRecordFromWishList(@Param("u") int userId);
 
     @Query(value = "select * from wish_list c where c.user_id=:u", nativeQuery = true)
     public List<WishList> findFromWishListByUserId(@Param("u") int userId);

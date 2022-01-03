@@ -4,9 +4,14 @@ import com.MultipleTableFetch.Dto.AssignmentDto;
 import com.MultipleTableFetch.Dto.AssignmentResponseDto;
 import com.MultipleTableFetch.Dto.ResponseHandler;
 import com.MultipleTableFetch.Entity.CreateAssignment;
+import com.MultipleTableFetch.Entity.DemoEntityForValidation;
 import com.MultipleTableFetch.Entity.UploadQuiz;
+import com.MultipleTableFetch.Helper.FileUploadHelper;
+import com.MultipleTableFetch.Repository.DemoEntityForValidationRepository;
 import com.MultipleTableFetch.Repository.QuizRepository;
 import com.MultipleTableFetch.Service.AssignmentService;
+import com.google.common.net.HttpHeaders;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,17 +19,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 public class AssignmentController {
 
-
+    @Autowired
+    FileUploadHelper fileUploadHelper;
     @Autowired
     AssignmentService assignmentService;
     @Autowired
     QuizRepository quizRepository;
+    @Autowired
+    DemoEntityForValidationRepository demoEntityForValidationRepository;
 
     @GetMapping("getAssignmentByAssignmentId")
     public ResponseEntity<Object> getCreateAssignment(@RequestParam Long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
@@ -57,14 +67,63 @@ public class AssignmentController {
         return ResponseHandler.response(assignment, "Successfully Updated Assignment Details", true, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/uploadQuiz/",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> uploadQuiz(@RequestParam String quizName, @RequestParam MultipartFile quizFile, @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws IOException {
-//        FileInputStream fileInputStream = (FileInputStream) quizFile.getInputStream();
-        UploadQuiz uploadQuiz1 = new UploadQuiz();
-        uploadQuiz1.setQuizName(quizName);
-        //      uploadQuiz1.setQuizFile(fileInputStream);
-        uploadQuiz1.setQuizFile(quizFile);
-        UploadQuiz uploadQuiz = quizRepository.save(uploadQuiz1);
-        return ResponseHandler.response(uploadQuiz, "Successfully Created Quiz With Given Details", true, HttpStatus.OK);
+    @PostMapping(path = "/uploadQuiz", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadQuiz(/*@RequestParam String quizName,*/ @RequestPart("quizFile") @ApiParam(value = "quizFile", required = true) MultipartFile quizFile, @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws IOException {
+
+        if (quizFile.isEmpty()) {
+            return ResponseHandler.response("", "Request Must Contain File.", false, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else if (!quizFile.getContentType().equals("image/jpeg")) {
+            return ResponseHandler.response("", "Only JPEG Content Type Is Allowed.", false, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            String s = fileUploadHelper.uploadFile(quizFile);
+            if (s != null) {
+                UploadQuiz uploadQuiz = new UploadQuiz();
+                uploadQuiz.setQuizName(quizFile.getOriginalFilename());
+                uploadQuiz.setQuizFile1(s);
+                quizRepository.save(uploadQuiz);
+                // assignmentService.save(quizFile);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(String.format("File uploaded successfully: %s", quizFile.getOriginalFilename()));
+            } else
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(String.format("Could not upload the file: %s!", quizFile.getOriginalFilename()));
+
+            /*try {
+                assignmentService.save(quizFile);
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(String.format("File uploaded successfully: %s", quizFile.getOriginalFilename()));
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(String.format("Could not upload the file: %s!", quizFile.getOriginalFilename()));
+            }*/
+        }
     }
+
+    /* UploadQuiz uploadQuiz1 = new UploadQuiz();
+        uploadQuiz1.setQuizName(quizName);
+    //      uploadQuiz1.setQuizFile(fileInputStream);
+    //   uploadQuiz1.setQuizFile(quizFile);
+    UploadQuiz uploadQuiz = quizRepository.save(uploadQuiz1);
+        return ResponseHandler.response(uploadQuiz,"Successfully Created Quiz With Given Details",true,HttpStatus.OK);
+}*/
+    @GetMapping("getFileById")
+    public ResponseEntity<Object> getFile(@RequestParam Long id) {
+        Optional<UploadQuiz> fileEntityOptional = assignmentService.getFile(id);
+
+        if (!fileEntityOptional.isPresent()) {
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        UploadQuiz uploadQuiz = fileEntityOptional.get();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + uploadQuiz.getQuizName() + "\"")
+                .body(uploadQuiz.getQuizFile1());
+    }
+
+    @PostMapping("/DemoEntity")
+    public ResponseEntity<Object> DemoEntity(@Valid @RequestBody DemoEntityForValidation demoEntityForValidation) {
+        DemoEntityForValidation assignment1 = demoEntityForValidationRepository.save(demoEntityForValidation);
+        return ResponseHandler.response(assignment1, "Successfully Created Assignment With Given Details", true, HttpStatus.OK);
+    }
+
 }

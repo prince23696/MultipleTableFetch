@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.nio.file.Path;
 
 @Entity
 @Getter
@@ -18,9 +18,5 @@ public class UploadQuiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
     private String quizName;
-    @Lob
-    private byte[] quizFile;
-
-    public void setQuizFile(MultipartFile quizFile) {
-    }
+    private String quizFile1;
 }

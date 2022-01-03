@@ -30,13 +30,18 @@ public class MultipleTableFetchApplication {
                 .build();
         //.globalOperationParameters(Collections.singletonList(authHeader));
     }
+
     /*@Bean
     public ResourceBundleMessageSource bundleMessageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("message.properties");
         return messageSource;
     }*/
-
+   /* @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver commonsMultipartResolver() {
+        return new CommonsMultipartResolver();
+    }
+*/
     @Bean
     public ResourceBundleMessageSource messageSource() {
         var source = new ResourceBundleMessageSource();
