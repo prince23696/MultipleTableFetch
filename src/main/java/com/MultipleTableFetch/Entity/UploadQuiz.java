@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.nio.file.Path;
 
 @Entity
 @Getter
@@ -18,5 +17,5 @@ public class UploadQuiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
     private String quizName;
-    private String quizFile1;
+    private String quizFile;
 }

@@ -79,14 +79,11 @@ public class AssignmentController {
             if (s != null) {
                 UploadQuiz uploadQuiz = new UploadQuiz();
                 uploadQuiz.setQuizName(quizFile.getOriginalFilename());
-                uploadQuiz.setQuizFile1(s);
-                quizRepository.save(uploadQuiz);
-                // assignmentService.save(quizFile);
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(String.format("File uploaded successfully: %s", quizFile.getOriginalFilename()));
+                uploadQuiz.setQuizFile(s);
+                UploadQuiz save = quizRepository.save(uploadQuiz);
+                return ResponseHandler.response(save, "Successfully Added Assignment.", true, HttpStatus.OK);
             } else
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(String.format("Could not upload the file: %s!", quizFile.getOriginalFilename()));
+                return ResponseHandler.response("", "Could not upload the file: %s!" + quizFile.getOriginalFilename(), false, HttpStatus.BAD_REQUEST);
 
             /*try {
                 assignmentService.save(quizFile);
@@ -117,7 +114,7 @@ public class AssignmentController {
         UploadQuiz uploadQuiz = fileEntityOptional.get();
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + uploadQuiz.getQuizName() + "\"")
-                .body(uploadQuiz.getQuizFile1());
+                .body(uploadQuiz.getQuizFile());
     }
 
     @PostMapping("/DemoEntity")
@@ -125,5 +122,4 @@ public class AssignmentController {
         DemoEntityForValidation assignment1 = demoEntityForValidationRepository.save(demoEntityForValidation);
         return ResponseHandler.response(assignment1, "Successfully Created Assignment With Given Details", true, HttpStatus.OK);
     }
-
 }
