@@ -25,6 +25,7 @@ public class Users {
     private Long countryId;
     private String password;
     private String confirmPassword;
+    private String stripeCustomerId;
     private String resetToken;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     @JsonManagedReference

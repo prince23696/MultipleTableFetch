@@ -18,4 +18,5 @@ public interface BannerService {
 
     public Banner deleteBanner(Long id);
 
+    public void run();
 }

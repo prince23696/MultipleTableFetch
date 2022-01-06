@@ -3,13 +3,19 @@ package com.MultipleTableFetch.Service;
 import com.MultipleTableFetch.Entity.Banner;
 import com.MultipleTableFetch.Entity.StatusEnum;
 import com.MultipleTableFetch.Repository.BannerRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
 public class BannerServiceImpl implements BannerService {
+
+    private static Logger logger = LogManager.getLogger(BannerServiceImpl.class);
 
     @Autowired
     BannerRepository bannerRepository;
@@ -52,5 +58,11 @@ public class BannerServiceImpl implements BannerService {
         Banner banner = bannerRepository.findById(id).get();
         bannerRepository.deleteById(id);
         return banner;
+    }
+
+    @Override
+   // @Scheduled(initialDelay = 1000, fixedRate = 3000)
+    public void run() {
+       // logger.info("Current time is :: " + Calendar.getInstance().getTime());
     }
 }
